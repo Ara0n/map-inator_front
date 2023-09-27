@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"strict": true,
+		"noEmit": true,
+		"allowJs": false,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"jsx": "preserve",
+		"verbatimModuleSyntax": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true
+	},
+	"include": ["src/cssm.d.ts", "src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["node_modules", "dist", "report"]
+}

@@ -1,0 +1,51 @@
+extends:
+  - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'prettier'
+  - 'plugin:react/recommended'
+  - 'plugin:react/jsx-runtime'
+  - 'plugin:react-hooks/recommended'
+parser: '@typescript-eslint/parser'
+plugins:
+  - '@typescript-eslint'
+  - 'prettier'
+  - 'react'
+root: true
+rules:
+  'prettier/prettier': 2
+  'eqeqeq': [2, smart]
+  'no-unused-expressions': 2
+  'react/prop-types': 0
+settings:
+  react:
+    version: 'detect'
+overrides:
+  - files:
+      - '*.tsx'
+      - '*.ts'
+    extends:
+      - 'plugin:@typescript-eslint/recommended-type-checked'
+    rules:
+      '@typescript-eslint/no-misused-promises':
+        - 2
+        - checksVoidReturn: false
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 2
+      '@typescript-eslint/no-unnecessary-condition': 2
+      '@typescript-eslint/no-useless-empty-export': 2
+      '@typescript-eslint/non-nullable-type-assertion-style': 2
+      '@typescript-eslint/prefer-includes': 2
+      '@typescript-eslint/prefer-nullish-coalescing': 2
+      '@typescript-eslint/prefer-optional-chain': 2
+      '@typescript-eslint/prefer-reduce-type-parameter': 2
+      '@typescript-eslint/prefer-string-starts-ends-with': 2
+      '@typescript-eslint/promise-function-async': 2
+      '@typescript-eslint/switch-exhaustiveness-check': 2
+      '@typescript-eslint/dot-notation': 2
+      '@typescript-eslint/no-throw-literal': 2
+      '@typescript-eslint/no-unused-expressions': 2
+      '@typescript-eslint/unbound-method':
+        - 2
+        - ignoreStatic: true
+    parser: '@typescript-eslint/parser'
+    parserOptions:
+      project: 'tsconfig.json'
