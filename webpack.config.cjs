@@ -117,7 +117,7 @@ module.exports = [
 		},
 		target: 'web',
 		entry: {
-			main: './src/index.ts',
+			main: './src/index.tsx',
 		},
 		output: {
 			filename: 'assets/code/index.js',

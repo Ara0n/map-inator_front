@@ -1,5 +1,5 @@
 semi: false
-singleQuote: true
+singleQuote: false
 quoteProps: consistent
 arrowParens: avoid
 bracketSameLine: true
