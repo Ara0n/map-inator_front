@@ -6,4 +6,29 @@
 		height: 100vh;
 		width: 100vw;
 	}
+
+	.addForm {
+		.formContent {
+			display: grid;
+			grid-template-columns: auto auto;
+			row-gap: 0.5rem;
+			column-gap: 0.3rem;
+			padding-bottom: 0.5rem;
+
+			input {
+				justify-self: start;
+				border-radius: 5px;
+
+				&:read-only {
+					background-color: lightgray;
+				}
+			}
+		}
+
+		.formButtons {
+			padding-top: 0.5rem;
+			display: grid;
+			justify-content: end;
+		}
+	}
 }

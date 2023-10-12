@@ -10,7 +10,7 @@ import {
 	LayersControl,
 } from "react-leaflet"
 import "./fix map.ts"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "./store/store.ts"
 import { toggle } from "./store/addSlice.ts"
@@ -42,14 +42,94 @@ function City() {
 }
 
 function AddCity() {
-	const cityName = "TestCity"
-	void fetch(`/api/city/${encodeURIComponent(cityName)}`, {
-		method: "PUT",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ cityName: cityName }),
+	const [cityName, setCityName] = useState("")
+	const [hasTree, setHasTree] = useState(false)
+	const [hasCircle, setHasCircle] = useState(false)
+	const [coords, setCoords] = useState<LatLng>(new LatLng(-1, -1))
+	useMapEvent("click", event => {
+		console.log(event)
+
+		setCoords(event.latlng)
 	})
 
-	return null
+	const formRef = useRef<HTMLFormElement>(null)
+
+	async function submit() {
+		const lat = coords.lat
+		const lng = coords.lng
+		const data = { cityName, lat, lng, hasTree, hasCircle }
+
+		console.log(data)
+		const res = await fetch(
+			`/api/city/${encodeURIComponent(data.cityName)}`,
+			{
+				method: "PUT",
+				body: JSON.stringify(data),
+				headers: { "Content-Type": "application/json" },
+			},
+		)
+		if (!res.ok) console.error(res.status, res.statusText, await res.text())
+	}
+
+	return (
+		<Popup>
+			<form
+				ref={formRef}
+				className="addForm"
+				onSubmitCapture={e => {
+					e.stopPropagation()
+					e.preventDefault()
+					void submit()
+				}}>
+				<div className="formContent">
+					<label htmlFor="cityName">City name</label>
+					<input
+						type="text"
+						name="cityName"
+						id="cityName"
+						value={cityName}
+						onChange={e => setCityName(e.target.value)}
+					/>
+					<label htmlFor="latitude">Latitude</label>
+					<input
+						type="text"
+						name="latitude"
+						id="latitude"
+						value={coords.lat * mapScale}
+						readOnly
+					/>
+					<label htmlFor="longitude">Longitude</label>
+					<input
+						type="text"
+						name="longitude"
+						id="longitude"
+						value={coords.lng * mapScale}
+						readOnly
+					/>
+					<label htmlFor="hasTree">Large Tree</label>
+					<input
+						type="checkbox"
+						name="hasTree"
+						id="hasTree"
+						checked={hasTree}
+						onChange={e => setHasTree(e.target.checked)}
+					/>
+					<label htmlFor="hasCircle">Teleportation Circle</label>
+					<input
+						type="checkbox"
+						name="hasCircle"
+						id="hasCircle"
+						checked={hasCircle}
+						onChange={e => setHasCircle(e.target.checked)}
+					/>
+				</div>
+				<hr />
+				<div className="formButtons">
+					<button type="submit">Add</button>
+				</div>
+			</form>
+		</Popup>
+	)
 }
 
 function Mediums() {
@@ -98,6 +178,7 @@ function MapClick() {
 
 	const [coords, setCoords] = useState<LatLng>()
 	useMapEvent("click", event => {
+		if (!cityMode) return null
 		console.log(event)
 
 		setCoords(event.latlng)
@@ -105,14 +186,14 @@ function MapClick() {
 
 	console.log("current mode is: " + cityMode)
 
-	if (!coords || !cityMode) return null
+	if (!coords) return null
 
 	return (
 		<Marker position={coords}>
 			<AddCity />
-			<Popup autoClose={false}>
+			{/* <Popup autoClose={false}>
 				coords are {coords.lat * mapScale} lat {coords.lng * mapScale}
-			</Popup>
+			</Popup> */}
 		</Marker>
 	)
 }
