@@ -290,14 +290,6 @@ export function Map({ map }: { map: string }) {
 						</LayersControl.Overlay>
 					</LayersControl>
 					<AddCityControl />
-					<Marker position={[0, 0]}>
-						<Popup closeOnClick={false} closeButton={false}>
-							Lorem ipsum dolor sit amet consectetur adipisicing
-							elit. Iure magni quod mollitia odio harum dolor ad
-							architecto veniam? Accusantium neque, beatae ut
-							delectus hic fuga eius odio nesciunt iste pariatur.
-						</Popup>
-					</Marker>
 				</MapContainer>
 			}
 		</>
