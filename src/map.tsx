@@ -33,12 +33,85 @@ function AutoZoom() {
 }
 
 function Cities() {
-	return <FeatureGroup></FeatureGroup>
+	const [cityNames, setCityNames] = useState<string[]>([])
+
+	useEffect(() => {
+		const fetchCityNames = async () => {
+			const res = await fetch("/api/city")
+
+			if (!res.ok) {
+				console.error(res.status, res.statusText, await res.text())
+				return null
+			}
+
+			const names = (await res.json()) as string[]
+			console.log(names)
+
+			setCityNames(names)
+		}
+
+		void fetchCityNames()
+	}, [])
+
+	return (
+		<FeatureGroup>
+			{cityNames.map(city => (
+				<City key={city} name={city} />
+			))}
+		</FeatureGroup>
+	)
 }
 
-function City() {
+function City({ name }: { name: string }) {
 	// return a marker either in view or edit mode
-	return null
+
+	const [cityData, setCityData] = useState<{
+		name: string
+		lat: number
+		lng: number
+		hasTree: boolean
+		hasCircle: boolean
+	}>()
+
+	useEffect(() => {
+		console.log("City:", name)
+
+		const fetchCityInfo = async () => {
+			const res = await fetch("/api/city/" + name)
+
+			if (!res.ok) {
+				console.error(res.status, res.statusText, await res.text())
+				return null
+			}
+
+			const data = (await res.json()) as {
+				name: string
+				lat: number
+				lng: number
+				hasTree: boolean
+				hasCircle: boolean
+			}
+			console.log(data)
+
+			setCityData(data)
+		}
+
+		void fetchCityInfo()
+	}, [name])
+
+	if (!cityData) return null
+
+	return (
+		<Marker position={new LatLng(cityData.lat, cityData.lng)}>
+			<Popup>
+				City Name: {cityData.name} <br />
+				Latitude: {cityData.lat * mapScale} <br />
+				Longitude: {cityData.lng * mapScale} <br />
+				Has Tree: {cityData.hasTree ? "yes" : "no"} <br />
+				Has Circle: {cityData.hasCircle ? "yes" : "no"} <br />
+			</Popup>
+		</Marker>
+	)
 }
 
 function AddCity() {
@@ -191,9 +264,6 @@ function MapClick() {
 	return (
 		<Marker position={coords}>
 			<AddCity />
-			{/* <Popup autoClose={false}>
-				coords are {coords.lat * mapScale} lat {coords.lng * mapScale}
-			</Popup> */}
 		</Marker>
 	)
 }
